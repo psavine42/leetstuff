@@ -7,7 +7,7 @@ class BinaryIndexTree:
 
         l = len(nums)
         for i in range(1, l):
-            for j
+            pass
 
 
     def update(self):
@@ -18,3 +18,4 @@ class BinaryIndexTree:
 
 
     def _get_sum(self, idx):
+        pass

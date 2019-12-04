@@ -1,3 +1,4 @@
+
 # Definition for a binary tree node.
 class TreeNode(object):
     def __init__(self, x):
@@ -6,10 +7,10 @@ class TreeNode(object):
         self.right = None
 
     def __repr__(self):
-        return f'<{self.__class__.__name__}>{self.val}'
+        return f'({self.__class__.__name__}: {self.val})'
 
 
-class Codec2:
+class CodecBST:
     def serialize(self, root):
         """Encodes a tree to a single string.
 
@@ -20,21 +21,23 @@ class Codec2:
             return '[]'
 
         res = []
-        level = [root]
-        while level:
-            tmp = []
-            n = len(level)
-            for i in range(n):
-                node = level[i]
-                if node:
-                    tmp.append(node.left)
-                    tmp.append(node.right)
-            print([x.val if x else 'null' for x in tmp])
-            if any(tmp):
-                level = tmp
-                res += [x.val if x else 'null' for x in tmp]
-            else:
-                level = None
+        n = 1
+        q = [(root, 0)]
+        while q:
+            el, idx = q.pop()
+            l, r = el.left, el.right
+
+            # compute index of child
+            # add el to res as
+            # ch =
+
+            #     ch.append(-l.val)
+
+
+            if ch:
+                n += 1
+            #     for n in ch
+
         s = f"[{','.join([str(x) for x in res])}]"
         print(s)
         return s
@@ -71,8 +74,8 @@ class Codec2:
                     else:
                         parent.right = node
 
-class Codec:
 
+class Codec:
     def serialize(self, root):
         """Encodes a tree to a single string.
 
@@ -84,7 +87,10 @@ class Codec:
 
         level = [root]
         res = [root.val]
+
         while level:
+            # if a node has children
+            # [c1, c2] if left only [c1, none] if left only [none, c2]
             tmp = []
             n = len(level)
             for i in range(n):
@@ -92,14 +98,19 @@ class Codec:
                 if node:
                     tmp.append(node.left)
                     tmp.append(node.right)
-            print([x.val if x else None for x in tmp])
+
+            # print([x.val if x else None for x in tmp])
             if any(tmp):
                 level = tmp
                 res += [x.val if x else None for x in tmp]
             else:
                 level = None
+
+        while res[-1] == None:
+            res.pop()
+
         s = f"[{','.join([str(x) for x in res])}]"
-        print(s)
+        # print(s)
         return s
 
     def deserialize(self, data):
@@ -117,43 +128,30 @@ class Codec:
             # root cannot be null ?
             return TreeNode(int(data[0]))
 
-        print(data)
-        print('--------------')
         root = TreeNode(int(data.pop(0)))
         level_size = 2
         prev_level = [root]
-        prev_start = 0
-        l = 1
-
         while data:
             level = []
-            i = prev_start
-            prev_start = 0
+            i = 0
             while i < level_size and data:
                 val = data.pop(0)
-                print(l, i, val)
                 if val != 'None':
                     node = TreeNode(int(val))
                     parent = prev_level[i//2]
-                    # if
 
                     if i % 2 == 0:
                         parent.left = node
                     else:
                         parent.right = node
 
-
                     level.append(node)
-                else:
-                    # level.append(val)
-                    prev_start += 1
 
                 i += 1
-            print(l, level)
+            if not level:
+                break
             prev_level = level
-            # prev_size = level_size
-            level_size *= 2
-            l += 1
+            level_size = len(level) * 2
         return root
 
 
@@ -187,16 +185,17 @@ def run():
     tests = [
         [1,2,   3,None,None,4,5],
         [1,None,3,4],
-        [5, 4, 7, 3, None, 2, None, -1, None, 9]
+        [5, 4, 7, 3, None, 2, None, -1, None, 9],
+        [1]
     ]
     s = Codec()
     for t in tests:
-        t = str(t)
+        t = str(t).replace(" ", "")
         print(f'-----------------\n{t}\n--------------')
         tree = s.deserialize(t)
         res = s.serialize(tree)
-        print(f'\n{t.replace(" ", "")} --> {res}, ')
-        # assert res == answer
+        print(f'\n{t} --> {res}')
+        assert t == res
 
 
 if __name__ == '__main__':
